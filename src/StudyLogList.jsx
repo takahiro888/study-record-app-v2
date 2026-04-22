@@ -1,35 +1,60 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./styles.css";
+import {
+  getAllRecords,
+  addRecord,
+  deleteRecord,
+} from "./utils/supabaseFunctions";
+import { styled } from "styled-components";
 
 export const StudyLogList = () => {
   const [records, setRecords] = useState([]);
   const [studyTitle, setStudyTitle] = useState("");
   const [studyTime, setStudyTime] = useState(0);
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    const getRecords = async () => {
+      setIsLoading(true); // ①読み込み開始！
+      const records = await getAllRecords();
+      setRecords(records);
+      setIsLoading(false); // ②読み込み終了！
+    };
+    getRecords();
+  }, []);
 
   const onChangeTitle = (event) => setStudyTitle(event.target.value);
   const onChangeTime = (event) => setStudyTime(event.target.value);
 
-  const onClickAdd = () => {
+  const onClickAdd = async () => {
     if (studyTitle === "" || studyTime === "" || studyTime === 0) {
       setError("入力されていない項目があります");
       return;
     }
 
-    const newRecord = {
-      title: studyTitle,
-      time: Number(studyTime),
-    };
-    const newRecords = [...records, newRecord];
-    setRecords(newRecords);
+    await addRecord(studyTitle, Number(studyTime));
+
+    // データベースから最新のデータを再取得
+    const updatedRecords = await getAllRecords();
+    setRecords(updatedRecords);
+
     setStudyTitle("");
     setStudyTime(0);
     setError("");
   };
 
+  const onClickDelete = async (id) => {
+    await deleteRecord(id);
+    const newRecords = records.filter((record) => record.id !== id);
+    setRecords(newRecords);
+  };
   const totalTime = records.reduce((total, record) => {
     return total + record.time;
   }, 0);
+
+  if (isLoading) {
+    return <div style={{}}>Loading...</div>;
+  }
 
   return (
     <>
@@ -49,11 +74,14 @@ export const StudyLogList = () => {
           <p>入力されている時間:{studyTime}時間</p>
         </div>
         {records.map((record, index) => (
-          <div key={index}>
+          <SDiv key={index}>
             <p>
               {record.title} {record.time}時間
             </p>
-          </div>
+            <SDeleteButton onClick={() => onClickDelete(record.id)}>
+              削除
+            </SDeleteButton>
+          </SDiv>
         ))}
         <button onClick={onClickAdd}>登録</button>
         {error && <p style={{ color: "red" }}>{error}</p>}
@@ -62,3 +90,12 @@ export const StudyLogList = () => {
     </>
   );
 };
+
+const SDiv = styled.div`
+  display: flex;
+  justify-content: left;
+  align-items: center;
+`;
+const SDeleteButton = styled.button`
+  margin-left: 10px;
+`;
