@@ -13,6 +13,7 @@ dist-ssr
 build
 *.local
 .env
+.firebase
 
 # Editor directories and files
 .vscode/*
