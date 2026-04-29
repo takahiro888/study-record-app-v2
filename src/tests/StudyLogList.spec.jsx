@@ -17,6 +17,11 @@ jest.mock("../utils/supabaseFunctions", () => ({
 }));
 
 describe("StudyLogList Title Test", () => {
+  beforeEach(() => {
+    // 各テストの前にモック関数をクリア
+    jest.clearAllMocks();
+  });
+
   it("タイトルが学習記録一覧であること", async () => {
     // testId(title)を指定して取得
     render(<StudyLogList />);
@@ -105,5 +110,35 @@ describe("StudyLogList Title Test", () => {
       const records = screen.queryAllByTestId("study-record");
       expect(records).toHaveLength(0);
     });
+  });
+
+  it("入力をしないで登録を押すとエラーが表示される", async () => {
+    const user = userEvent.setup();
+
+    // 初期状態は空の配列
+    getAllRecords.mockResolvedValueOnce([]);
+
+    render(<StudyLogList />);
+
+    // ローディングが完了するのを待つ
+    await waitFor(() => {
+      expect(screen.queryByText("Loading...")).not.toBeInTheDocument();
+    });
+
+    // エラーメッセージが表示されていないことを確認
+    expect(screen.queryByTestId("error-message")).not.toBeInTheDocument();
+
+    // 何も入力せずに登録ボタンをクリック
+    const addButton = screen.getByTestId("button-add");
+    await user.click(addButton);
+
+    // エラーメッセージが表示されることを確認
+    await waitFor(() => {
+      const errorMessage = screen.getByTestId("error-message");
+      expect(errorMessage).toHaveTextContent("入力されていない項目があります");
+    });
+
+    // addRecordが呼ばれていないことを確認
+    expect(addRecord).not.toHaveBeenCalled();
   });
 });

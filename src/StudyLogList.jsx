@@ -98,7 +98,11 @@ export const StudyLogList = () => {
         <button data-testid="button-add" onClick={onClickAdd}>
           登録
         </button>
-        {error && <p style={{ color: "red" }}>{error}</p>}
+        {error && (
+          <p style={{ color: "red" }} data-testid="error-message">
+            {error}
+          </p>
+        )}
         <p>合計時間：{totalTime}/1000(h)</p>
       </div>
     </>
