@@ -72,4 +72,38 @@ describe("StudyLogList Title Test", () => {
       expect(screen.getByText("React学習 3時間")).toBeInTheDocument();
     });
   });
+
+  it("削除ボタンを押すと学習記録が削除される", async () => {
+    const user = userEvent.setup();
+
+    // 初期状態で1件のレコードがある
+    getAllRecords.mockResolvedValueOnce([
+      { id: 1, title: "TypeScript学習", time: 2 },
+    ]);
+
+    render(<StudyLogList />);
+
+    // ローディングが完了するのを待つ
+    await waitFor(() => {
+      expect(screen.queryByText("Loading...")).not.toBeInTheDocument();
+    });
+
+    // 初期状態ではレコードが1件
+    const initialRecords = screen.getAllByTestId("study-record");
+    expect(initialRecords).toHaveLength(1);
+    expect(screen.getByText("TypeScript学習 2時間")).toBeInTheDocument();
+
+    // 削除ボタンを取得してクリック
+    const deleteButton = screen.getByTestId("button-delete");
+    await user.click(deleteButton);
+
+    // deleteRecordが正しいIDで呼ばれたことを確認
+    expect(deleteRecord).toHaveBeenCalledWith(1);
+
+    // レコードが削除されて0件になることを確認
+    await waitFor(() => {
+      const records = screen.queryAllByTestId("study-record");
+      expect(records).toHaveLength(0);
+    });
+  });
 });

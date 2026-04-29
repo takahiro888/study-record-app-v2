@@ -87,7 +87,10 @@ export const StudyLogList = () => {
             <p>
               {record.title} {record.time}時間
             </p>
-            <SDeleteButton onClick={() => onClickDelete(record.id)}>
+            <SDeleteButton
+              data-testid="button-delete"
+              onClick={() => onClickDelete(record.id)}
+            >
               削除
             </SDeleteButton>
           </SDiv>
