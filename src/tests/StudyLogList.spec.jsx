@@ -2,6 +2,12 @@ import { StudyLogList } from "../StudyLogList";
 import React from "react";
 import "@testing-library/jest-dom";
 import { render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import {
+  getAllRecords,
+  addRecord,
+  deleteRecord,
+} from "../utils/supabaseFunctions";
 
 // Supabase関数をモック
 jest.mock("../utils/supabaseFunctions", () => ({
@@ -19,6 +25,51 @@ describe("StudyLogList Title Test", () => {
     await waitFor(() => {
       const title = screen.getByTestId("title");
       expect(title).toHaveTextContent("学習記録一覧");
+    });
+  });
+
+  it("フォームに学習内容と時間を入力して登録ボタンを押すと新たに記録が追加される", async () => {
+    const user = userEvent.setup();
+
+    // 初期状態は空の配列
+    getAllRecords.mockResolvedValueOnce([]);
+
+    render(<StudyLogList />);
+
+    // ローディングが完了するのを待つ
+    await waitFor(() => {
+      expect(screen.queryByText("Loading...")).not.toBeInTheDocument();
+    });
+
+    // 初期状態ではレコードが0件
+    const initialRecords = screen.queryAllByTestId("study-record");
+    expect(initialRecords).toHaveLength(0);
+
+    // 入力フィールドに値を入力
+    const titleInput = screen.getByTestId("input-title");
+    const timeInput = screen.getByTestId("input-time");
+    const addButton = screen.getByTestId("button-add");
+
+    await user.type(titleInput, "React学習");
+    await user.clear(timeInput);
+    await user.type(timeInput, "3");
+
+    // addRecordが呼ばれた後、getAllRecordsが新しいデータを返すようにモック
+    getAllRecords.mockResolvedValueOnce([
+      { id: 1, title: "React学習", time: 3 },
+    ]);
+
+    // 登録ボタンをクリック
+    await user.click(addButton);
+
+    // addRecordが呼ばれたことを確認
+    expect(addRecord).toHaveBeenCalledWith("React学習", 3);
+
+    // 新しいレコードが表示されるのを待つ
+    await waitFor(() => {
+      const records = screen.getAllByTestId("study-record");
+      expect(records).toHaveLength(1);
+      expect(screen.getByText("React学習 3時間")).toBeInTheDocument();
     });
   });
 });

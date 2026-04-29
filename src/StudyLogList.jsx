@@ -62,11 +62,20 @@ export const StudyLogList = () => {
         <h1 data-testid="title">学習記録一覧</h1>
         <div>
           <p>◾️学習内容</p>
-          <input value={studyTitle} onChange={onChangeTitle} />
+          <input
+            data-testid="input-title"
+            value={studyTitle}
+            onChange={onChangeTitle}
+          />
         </div>
         <div>
           <p>◾️学習記録</p>
-          <input type="number" value={studyTime} onChange={onChangeTime} />
+          <input
+            data-testid="input-time"
+            type="number"
+            value={studyTime}
+            onChange={onChangeTime}
+          />
           時間
         </div>
         <div>
@@ -74,7 +83,7 @@ export const StudyLogList = () => {
           <p>入力されている時間:{studyTime}時間</p>
         </div>
         {records.map((record, index) => (
-          <SDiv key={index}>
+          <SDiv key={index} data-testid="study-record">
             <p>
               {record.title} {record.time}時間
             </p>
@@ -83,7 +92,9 @@ export const StudyLogList = () => {
             </SDeleteButton>
           </SDiv>
         ))}
-        <button onClick={onClickAdd}>登録</button>
+        <button data-testid="button-add" onClick={onClickAdd}>
+          登録
+        </button>
         {error && <p style={{ color: "red" }}>{error}</p>}
         <p>合計時間：{totalTime}/1000(h)</p>
       </div>
