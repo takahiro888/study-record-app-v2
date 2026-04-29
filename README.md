@@ -2,38 +2,42 @@
 
 学習時間を記録・管理するためのWebアプリケーションです。学習内容とかかった時間を登録し、合計時間を可視化することができます。
 
-## 🚀 デモ
+## デモ
 
 [https://study-recods-app-v2.web.app](https://study-recods-app-v2.web.app)
 
-## ✨ 機能
+## 機能
 
-- ✅ 学習記録の追加
-- ✅ 学習記録の削除
-- ✅ 合計学習時間の表示
-- ✅ 入力バリデーション
-- ✅ リアルタイムデータベース連携（Supabase）
+- 学習記録の追加
+- 学習記録の削除
+- 合計学習時間の表示
+- 入力バリデーション
+- リアルタイムデータベース連携（Supabase）
 
-## 🛠️ 技術スタック
+## 技術スタック
 
 ### フロントエンド
+
 - **React** 19.2.4 - UIライブラリ
 - **Vite** 8.0.4 - ビルドツール
 - **styled-components** 6.4.1 - CSS-in-JS
 
 ### バックエンド
+
 - **Supabase** 2.103.3 - PostgreSQLベースのBaaS
 
 ### テスト
+
 - **Jest** 30.3.0 - テストフレームワーク
 - **React Testing Library** 16.3.2 - コンポーネントテスト
 - **@testing-library/user-event** 14.6.1 - ユーザーイベントシミュレーション
 
 ### デプロイ & CI/CD
+
 - **Firebase Hosting** - ホスティング
 - **GitHub Actions** - 自動デプロイパイプライン
 
-## 📦 セットアップ
+## セットアップ
 
 ### 前提条件
 
@@ -69,7 +73,7 @@ npm run dev
 
 ブラウザで [http://localhost:5173](http://localhost:5173) を開いてください。
 
-## 🧪 テスト
+## テスト
 
 ### テストの実行
 
@@ -86,12 +90,12 @@ npm run test -- --watch
 
 ### テストカバレッジ
 
-- ✅ タイトル表示のテスト
-- ✅ フォーム入力と登録機能のテスト
-- ✅ 削除機能のテスト
-- ✅ バリデーションエラーのテスト
+- タイトル表示のテスト
+- フォーム入力と登録機能のテスト
+- 削除機能のテスト
+- バリデーションエラーのテスト
 
-## 🏗️ ビルド
+## ビルド
 
 ```bash
 npm run build
@@ -99,7 +103,7 @@ npm run build
 
 ビルド成果物は `build/` ディレクトリに出力されます。
 
-## 📤 デプロイ
+## デプロイ
 
 ### 自動デプロイ（推奨）
 
@@ -124,7 +128,7 @@ firebase login
 firebase deploy
 ```
 
-## 📁 プロジェクト構造
+## プロジェクト構造
 
 ```
 study-record-app-v2/
@@ -148,7 +152,7 @@ study-record-app-v2/
 └── package.json              # 依存関係
 ```
 
-## 🔧 開発
+## 開発
 
 ### Linting
 
@@ -162,7 +166,7 @@ npm run lint
 npm run preview
 ```
 
-## 📝 Supabaseテーブル定義
+## Supabaseテーブル定義
 
 ```sql
 CREATE TABLE study_records (
@@ -173,7 +177,7 @@ CREATE TABLE study_records (
 );
 ```
 
-## 🤝 コントリビューション
+## コントリビューション
 
 1. このリポジトリをフォーク
 2. フィーチャーブランチを作成 (`git checkout -b feature/amazing-feature`)
@@ -190,11 +194,11 @@ CREATE TABLE study_records (
 - `docs:` - ドキュメントの変更
 - `refactor:` - リファクタリング
 
-## 📄 ライセンス
+## ライセンス
 
 このプロジェクトはプライベートプロジェクトです。
 
-## 🙏 謝辞
+## 参考リンク
 
 - [React](https://react.dev/)
 - [Vite](https://vite.dev/)
